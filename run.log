@@ -1,0 +1,337 @@
+2024-08-25 19:25:38 - INFO - [Environment Info]:Set environment varibles:
+	API_KEY:xxxx
+	EnableMultiTurns:true
+	ProjectPath:/Users/whu/Downloads/agent-framework
+
+2024-08-25 19:25:38 - INFO - [Config Info]:Set Agent Framework variables:
+	system_type: multi
+	enable_multi_turns: true
+	agent_type: ['executor', 'refiner', 'searcher']
+	num_agents: 3
+	single_mode: True
+	is_stream: False
+	is_remote_llm: True
+	llm_based: True
+	llm_model_type: ['chatgpt', 'chatgpt', 'chatgpt']
+	llm_model_path_or_name: None
+	top_p: 0
+	top_k: 1
+	temperature: 0
+	is_remote_call: True
+	call_tool_for_check: True
+	has_memory: True
+	memory_type: graph
+	n_shot_prompt: 1
+	language: en
+	retrieval_technique: None
+2024-08-25 20:28:53 - INFO - [Environment Info]:Set environment varibles:
+	API_KEY:xxxx
+	EnableMultiTurns:true
+	ProjectPath:/Users/whu/Downloads/agent-framework
+
+2024-08-25 20:28:53 - INFO - [Config Info]:Set Agent Framework variables:
+	system_type: multi_agents
+	enable_multi_turns: true
+	agent_type: ['executor', 'refiner', 'searcher']
+	num_agents: 3
+	single_mode: True
+	is_stream: False
+	is_remote_llm: True
+	llm_based: True
+	llm_model_type: ['chatgpt', 'chatgpt', 'chatgpt']
+	llm_model_path_or_name: None
+	top_p: 0
+	top_k: 1
+	temperature: 0
+	is_remote_call: True
+	call_tool_for_check: True
+	has_memory: True
+	memory_type: graph
+	n_shot_prompt: 1
+	language: en
+	retrieval_technique: None
+2024-08-25 20:30:45 - INFO - [Environment Info]:Set environment varibles:
+	API_KEY:xxxx
+	EnableMultiTurns:true
+	ProjectPath:/Users/whu/Downloads/agent-framework
+
+2024-08-25 20:30:45 - INFO - [Config Info]:Set Agent Framework variables:
+	system_type: multi_agents
+	enable_multi_turns: true
+	agent_type: ['executor', 'refiner', 'searcher']
+	num_agents: 3
+	single_mode: True
+	is_stream: False
+	is_remote_llm: True
+	llm_based: True
+	llm_model_type: ['chatgpt', 'chatgpt', 'chatgpt']
+	llm_model_path_or_name: None
+	top_p: 0
+	top_k: 1
+	temperature: 0
+	is_remote_call: True
+	call_tool_for_check: True
+	has_memory: True
+	memory_type: graph
+	n_shot_prompt: 1
+	language: en
+	retrieval_technique: None
+2024-08-25 20:30:58 - INFO - [Environment Info]:Set environment varibles:
+	API_KEY:xxxx
+	EnableMultiTurns:true
+	ProjectPath:/Users/whu/Downloads/agent-framework
+
+2024-08-25 20:30:58 - INFO - [Config Info]:Set Agent Framework variables:
+	system_type: multi_agents
+	enable_multi_turns: true
+	agent_type: ['executor', 'refiner', 'searcher']
+	num_agents: 3
+	single_mode: True
+	is_stream: False
+	is_remote_llm: True
+	llm_based: True
+	llm_model_type: ['chatgpt', 'chatgpt', 'chatgpt']
+	llm_model_path_or_name: None
+	top_p: 0
+	top_k: 1
+	temperature: 0
+	is_remote_call: True
+	call_tool_for_check: True
+	has_memory: True
+	memory_type: graph
+	n_shot_prompt: 1
+	language: en
+	retrieval_technique: None
+2024-08-25 20:31:35 - INFO - [Environment Info]:Set environment varibles:
+	API_KEY:xxxx
+	EnableMultiTurns:true
+	ProjectPath:/Users/whu/Downloads/agent-framework
+
+2024-08-25 20:31:35 - INFO - [Config Info]:Set Agent Framework variables:
+	system_type: multi_agents
+	enable_multi_turns: true
+	agent_type: ['executor', 'refiner', 'searcher']
+	num_agents: 3
+	single_mode: True
+	is_stream: False
+	is_remote_llm: True
+	llm_based: True
+	llm_model_type: ['chatgpt', 'chatgpt', 'chatgpt']
+	llm_model_path_or_name: None
+	top_p: 0
+	top_k: 1
+	temperature: 0
+	is_remote_call: True
+	call_tool_for_check: True
+	has_memory: True
+	memory_type: graph
+	n_shot_prompt: 1
+	language: en
+	retrieval_technique: None
+2024-08-25 20:57:04 - INFO - [Environment Info]:Set environment varibles:
+	API_KEY:xxxx
+	EnableMultiTurns:true
+	ProjectPath:/Users/whu/Downloads/agent-framework
+
+2024-08-25 20:57:04 - INFO - [Config Info]:Set Agent Framework variables:
+	system_type: multi_agents
+	enable_multi_turns: true
+	agent_type: ['executor', 'refiner', 'searcher']
+	num_agents: 3
+	single_mode: True
+	is_stream: False
+	is_remote_llm: True
+	llm_based: True
+	llm_model_type: ['chatgpt', 'chatgpt', 'chatgpt']
+	llm_model_path_or_name: None
+	top_p: 0
+	top_k: 1
+	temperature: 0
+	is_remote_call: True
+	call_tool_for_check: True
+	has_memory: True
+	memory_type: graph
+	n_shot_prompt: 1
+	language: en
+	retrieval_technique: None
+2024-08-25 20:57:04 - INFO - [Running Info]:
+
+2024-08-25 21:16:06 - INFO - [Environment Info]:Set environment varibles:
+	API_KEY:xxxx
+	EnableMultiTurns:true
+	ProjectPath:/Users/whu/Downloads/agent-framework
+
+2024-08-25 21:16:06 - INFO - [Config Info]:Set Agent Framework variables:
+	system_type: multi_agents
+	enable_multi_turns: true
+	agent_type: ['executor', 'refiner', 'searcher']
+	num_agents: 3
+	is_stream: [False, False, False]
+	is_remote_llm: [True, True, True]
+	llm_based: [True, True, True]
+	llm_model_type: ['chatgpt', 'chatgpt', 'chatgpt']
+	llm_model_path_or_name: None
+	top_p: 0
+	top_k: 1
+	temperature: 0
+	is_remote_call: True
+	enable_call_tool_for_check: True
+	has_memory: True
+	memory_type: graph
+	n_shot_prompt: 1
+	language: en
+	retrieval_technique: None
+2024-08-25 21:19:45 - INFO - [Environment Info]:Set environment varibles:
+	API_KEY:xxxx
+	EnableMultiTurns:true
+	ProjectPath:/Users/whu/Downloads/agent-framework
+
+2024-08-25 21:19:45 - INFO - [Config Info]:Set Agent Framework variables:
+	system_type: multi_agents
+	enable_multi_turns: true
+	agent_type: ['executor', 'refiner', 'searcher']
+	num_agents: 3
+	is_stream: [False, False, False]
+	is_remote_llm: [True, True, True]
+	llm_based: [True, True, True]
+	llm_model_type: ['chatgpt', 'chatgpt', 'chatgpt']
+	llm_model_path_or_name: None
+	top_p: 0
+	top_k: 1
+	temperature: 0
+	is_remote_call: True
+	enable_call_tool_for_check: True
+	has_memory: True
+	memory_type: graph
+	n_shot_prompt: 1
+	language: en
+	retrieval_technique: None
+2024-08-25 21:20:07 - INFO - [Environment Info]:Set environment varibles:
+	API_KEY:xxxx
+	EnableMultiTurns:true
+	ProjectPath:/Users/whu/Downloads/agent-framework
+
+2024-08-25 21:20:07 - INFO - [Config Info]:Set Agent Framework variables:
+	system_type: multi_agents
+	enable_multi_turns: true
+	agent_type: ['executor', 'refiner', 'searcher']
+	num_agents: 3
+	is_stream: [False, False, False]
+	is_remote_llm: [True, True, True]
+	llm_based: [True, True, True]
+	llm_model_type: ['chatgpt', 'chatgpt', 'chatgpt']
+	llm_model_path_or_name: None
+	top_p: 0
+	top_k: 1
+	temperature: 0
+	is_remote_call: True
+	enable_call_tool_for_check: True
+	has_memory: True
+	memory_type: graph
+	n_shot_prompt: 1
+	language: en
+	retrieval_technique: None
+2024-08-25 21:21:06 - INFO - [Environment Info]:Set environment varibles:
+	API_KEY:xxxx
+	EnableMultiTurns:true
+	ProjectPath:/Users/whu/Downloads/agent-framework
+
+2024-08-25 21:21:06 - INFO - [Config Info]:Set Agent Framework variables:
+	system_type: multi_agents
+	enable_multi_turns: true
+	agent_type: ['executor', 'refiner', 'searcher']
+	num_agents: 3
+	is_stream: [False, False, False]
+	is_remote_llm: [True, True, True]
+	llm_based: [True, True, True]
+	llm_model_type: ['chatgpt', 'chatgpt', 'chatgpt']
+	llm_model_path_or_name: None
+	top_p: 0
+	top_k: 1
+	temperature: 0
+	is_remote_call: True
+	enable_call_tool_for_check: True
+	has_memory: True
+	memory_type: graph
+	n_shot_prompt: 1
+	language: en
+	retrieval_technique: None
+2024-08-25 21:21:16 - INFO - [Environment Info]:Set environment varibles:
+	API_KEY:xxxx
+	EnableMultiTurns:true
+	ProjectPath:/Users/whu/Downloads/agent-framework
+
+2024-08-25 21:21:16 - INFO - [Config Info]:Set Agent Framework variables:
+	system_type: multi_agents
+	enable_multi_turns: true
+	agent_type: ['executor', 'refiner', 'searcher']
+	num_agents: 3
+	is_stream: [False, False, False]
+	is_remote_llm: [True, True, True]
+	llm_based: [True, True, True]
+	llm_model_type: ['chatgpt', 'chatgpt', 'chatgpt']
+	llm_model_path_or_name: None
+	top_p: 0
+	top_k: 1
+	temperature: 0
+	is_remote_call: True
+	enable_call_tool_for_check: True
+	has_memory: True
+	memory_type: graph
+	n_shot_prompt: 1
+	language: en
+	retrieval_technique: None
+2024-08-25 21:21:38 - INFO - [Environment Info]:Set environment varibles:
+	API_KEY:xxxx
+	EnableMultiTurns:true
+	ProjectPath:/Users/whu/Downloads/agent-framework
+
+2024-08-25 21:21:38 - INFO - [Config Info]:Set Agent Framework variables:
+	system_type: multi_agents
+	enable_multi_turns: true
+	agent_type: ['executor', 'refiner', 'searcher']
+	num_agents: 3
+	is_stream: [False, False, False]
+	is_remote_llm: [True, True, True]
+	llm_based: [True, True, True]
+	llm_model_type: ['chatgpt', 'chatgpt', 'chatgpt']
+	llm_model_path_or_name: None
+	top_p: 0
+	top_k: 1
+	temperature: 0
+	is_remote_call: True
+	enable_call_tool_for_check: True
+	has_memory: True
+	memory_type: graph
+	n_shot_prompt: 1
+	language: en
+	retrieval_technique: None
+2024-08-25 21:21:38 - INFO - [Running Info]:
+
+2024-08-25 21:22:17 - INFO - [Environment Info]:Set environment varibles:
+	API_KEY:xxxx
+	EnableMultiTurns:true
+	ProjectPath:/Users/whu/Downloads/agent-framework
+
+2024-08-25 21:22:17 - INFO - [Config Info]:Set Agent Framework variables:
+	system_type: multi_agents
+	enable_multi_turns: true
+	agent_type: ['executor', 'refiner', 'searcher']
+	num_agents: 3
+	is_stream: [False, False, False]
+	is_remote_llm: [True, True, True]
+	llm_based: [True, True, True]
+	llm_model_type: ['chatgpt', 'chatgpt', 'chatgpt']
+	llm_model_path_or_name: None
+	top_p: 0
+	top_k: 1
+	temperature: 0
+	is_remote_call: True
+	enable_call_tool_for_check: True
+	has_memory: True
+	memory_type: graph
+	n_shot_prompt: 1
+	language: en
+	retrieval_technique: None
+2024-08-25 21:22:17 - INFO - [Running Info]:
+
