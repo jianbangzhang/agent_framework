@@ -10,20 +10,30 @@
 # emil       : whdx072018@foxmail.com
 # Description：
 """
+from abc import abstractmethod
 from .base_prompt import BasePrompt
 
 
 class LLMPrompt(BasePrompt):
-    def __init__(self,*args,**kwargs):
-        super(LLMPrompt,self).__init__(*args,**kwargs)
+    def __init__(self,language,n_shot_prompt,*args,**kwargs):
+        super(LLMPrompt,self).__init__(language,n_shot_prompt,*args,**kwargs)
         self.system_template=None
         self.requirements=None
         self.examples=None
+        self.prompt=None
 
     def set_lang(self,language:str):
+        """
+        :param language:
+        :return:
+        """
         self.prompt_language=language
 
     def set_example_number(self,value:int):
+        """
+        :param value:
+        :return:
+        """
         self.n_shot_examples=value
 
     def build_prompt(self,agent_name,input, *args, **kwargs):
@@ -38,11 +48,13 @@ class LLMPrompt(BasePrompt):
         elif agent_name=="searcher":
             if memory_obj is None:
                 raise ModuleNotFoundError
+            
 
         elif agent_name=="refiner":
             pass
         else:
             raise NotImplementedError
+
 
     def init_prompt(self, *args, **kwargs):
         """
@@ -50,6 +62,11 @@ class LLMPrompt(BasePrompt):
         :param kwargs:
         :return:
         """
+        raise NotImplementedError
+
+
+    @abstractmethod
+    def _check_config(self):
         raise NotImplementedError
 
     @classmethod

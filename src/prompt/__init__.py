@@ -10,4 +10,4 @@
 # emil       : whdx072018@foxmail.com
 # Description：
 """
-from .llm_prompt import LLM_Prompt
+from .llm_prompt import LLMPrompt

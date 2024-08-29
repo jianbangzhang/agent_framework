@@ -13,7 +13,7 @@
 
 from abc import ABC,abstractmethod
 from src.agents import AgentFactory
-from src.prompt import LLM_Prompt
+from src.prompt import LLMPrompt
 from src.memory import MemoryFactory
 from src.tools import BaseTool
 from src.action import Action
@@ -106,7 +106,7 @@ class AgentPipeline(Pipeline):
             self.agent_container[agent_name]=agent_obj
 
     def _setup_prompt_generator(self, *args, **kwargs):
-        self.prompt_generator_obj=LLM_Prompt(*args,**kwargs)
+        self.prompt_generator_obj=LLMPrompt(self.language,self.n_shot_prompt,*args,**kwargs)
 
     def _setup_tool_and_action(self, *args, **kwargs):
         self.tool_obj=BaseTool()

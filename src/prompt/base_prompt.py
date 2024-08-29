@@ -18,13 +18,13 @@ class BasePrompt(ABC):
     prompt_type="base class for prompt subclasses"
     prompt_description="This structure of prompt"
 
-    def __init__(self,*args,**kwargs):
+    def __init__(self,language,n_shot_prompt,*args,**kwargs):
         """
         :param args:
         :param kwargs:
         """
-        self.prompt_language=None
-        self.n_shot_examples=None
+        self.prompt_language=language
+        self.n_shot_examples=n_shot_prompt
 
     @abstractmethod
     def set_lang(self, language: str):
