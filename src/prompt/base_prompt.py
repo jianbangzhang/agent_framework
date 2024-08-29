@@ -24,6 +24,23 @@ class BasePrompt(ABC):
         :param kwargs:
         """
         self.prompt_language=None
+        self.n_shot_examples=None
+
+    @abstractmethod
+    def set_lang(self, language: str):
+        """
+        :param language:
+        :return:
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def set_example_number(self, value: int):
+        """
+        :param value:
+        :return:
+        """
+        raise NotImplementedError
 
     @abstractmethod
     def build_prompt(self,*args,**kwargs)->NoReturn:

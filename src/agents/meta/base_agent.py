@@ -35,21 +35,39 @@ class BaseAgent(MetaAgent):
         self.kwargs=kwargs
 
     def run(self,prompt_generator,*args,**kwargs):
+        """
+        :param prompt_generator:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         return self._run(prompt_generator,*args,**kwargs)
 
 
-    def _run(self, prompt_generator,*args, **kwargs):
+    def _run(self,prompt_generator,input,*args, **kwargs):
+        """
+        :param prompt_generator:
+        :param input:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         language=kwargs.get("language","zh")
         if language=="zh" or language=="en":
             prompt_generator.set_lang(language)
         else:
             raise ValueError
 
-        input_prompt=prompt_generator.build_prompt(self.agent_name,*args,**kwargs)
+        input_prompt=prompt_generator.build_prompt(self.agent_name,input,*args,**kwargs)
         output=self.llm_model.generate(input_prompt)
         return output
 
     def __repr__(self,*args, **kwargs):
+        """
+        :param args:
+        :param kwargs:
+        :return:
+        """
         language = kwargs.get("language", "zh")
         info=f"LLM_Based:{self.llm_model.model_type}"
         info+=f"Prompt_language:{language}"

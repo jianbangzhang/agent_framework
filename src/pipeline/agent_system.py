@@ -21,9 +21,6 @@ from src.action import Action
 
 class Pipeline(ABC):
     def __init__(self,*args,**kwargs):
-        self.agent_factory=AgentFactory()
-        self.memory=None
-        self.tools=BaseTool()
         self.agent_container=dict()
         self.result=None
         self.msg="[Running Info]:\n"
@@ -99,12 +96,13 @@ class AgentPipeline(Pipeline):
 
 
     def _setup_agents(self, *args, **kwargs):
+        agent_factory=AgentFactory()
         self.msg=f"[build agent]:"
         for i,(agent_name,base_llm,stream_chat) in enumerate(zip(self.agent_type,self.llm_model_type,self.is_stream)):
             info=f"build {agent_name} agent."
             self.msg+="\n\t"+info
             print(info)
-            agent_obj=self.agent_factory.build_agent(agent_name,base_llm,stream_chat)
+            agent_obj=agent_factory.build_agent(agent_name,base_llm,stream_chat)
             self.agent_container[agent_name]=agent_obj
 
     def _setup_prompt_generator(self, *args, **kwargs):

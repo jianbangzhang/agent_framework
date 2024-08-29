@@ -30,3 +30,4 @@ class RefinerAgent(BaseAgent):
         if memory is None:
             raise ValueError
         memory.update(content)
+

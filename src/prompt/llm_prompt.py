@@ -13,14 +13,20 @@
 from .base_prompt import BasePrompt
 
 
-class LLM_Prompt(BasePrompt):
+class LLMPrompt(BasePrompt):
     def __init__(self,*args,**kwargs):
-        super(LLM_Prompt,self).__init__(*args,**kwargs)
+        super(LLMPrompt,self).__init__(*args,**kwargs)
+        self.system_template=None
+        self.requirements=None
+        self.examples=None
 
     def set_lang(self,language:str):
         self.prompt_language=language
 
-    def build_prompt(self,agent_name, *args, **kwargs):
+    def set_example_number(self,value:int):
+        self.n_shot_examples=value
+
+    def build_prompt(self,agent_name,input, *args, **kwargs):
         """
         :param args:
         :param kwargs:
@@ -32,7 +38,7 @@ class LLM_Prompt(BasePrompt):
         elif agent_name=="searcher":
             if memory_obj is None:
                 raise ModuleNotFoundError
-            # todo
+
         elif agent_name=="refiner":
             pass
         else:
