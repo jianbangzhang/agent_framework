@@ -48,7 +48,7 @@ class LLMPrompt(BasePrompt):
         elif agent_name=="searcher":
             if memory_obj is None:
                 raise ModuleNotFoundError
-            
+
 
         elif agent_name=="refiner":
             pass
