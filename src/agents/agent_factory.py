@@ -16,8 +16,6 @@ from .searcher_agent import SearchAgent
 
 
 class AgentFactory(object):
-    def __init__(self):
-        pass
 
     def build_agent(self,agent_name,base_llm,stream_chat):
         if agent_name=="executor":
@@ -36,3 +34,5 @@ class AgentFactory(object):
             raise NotImplementedError
         return agent
 
+    def check_config(self):
+        raise NotImplementedError

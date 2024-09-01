@@ -38,11 +38,6 @@ class MetaMemory(ABC):
 
 
     @abstractmethod
-    def reorder(self,*args,**kwargs):
-        raise NotImplementedError
-
-
-    @abstractmethod
     def update(self,*args,**kwargs):
         raise NotImplementedError
 

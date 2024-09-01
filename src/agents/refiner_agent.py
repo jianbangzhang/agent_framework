@@ -16,17 +16,21 @@ from src.agents.meta.base_agent import BaseAgent
 
 
 class RefinerAgent(BaseAgent):
-    model_name="refiner"
     def __init__(self,
                  agent_type,
                  llm,
                  stream_chat,
                  **kwargs):
         super(RefinerAgent,self).__init__(agent_type,llm,stream_chat,**kwargs)
+        self.agent_name = "refiner"
 
-
-    def save2memory(self,content,**kwargs):
-        memory=kwargs.get("memory",None)
+    def save2memory(self,content,memory):
+        """
+        :param content:
+        :param memory:
+        :param kwargs:
+        :return:
+        """
         if memory is None:
             raise ValueError
         memory.update(content)

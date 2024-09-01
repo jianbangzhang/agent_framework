@@ -12,19 +12,22 @@
 """
 from abc import ABC
 from abc import abstractmethod
-from typing import NoReturn
+
+
+
 
 class BasePrompt(ABC):
     prompt_type="base class for prompt subclasses"
     prompt_description="This structure of prompt"
 
-    def __init__(self,language,n_shot_prompt,*args,**kwargs):
+    def __init__(self,language,n_shot_prompt,enable_rewrite,*args,**kwargs):
         """
         :param args:
         :param kwargs:
         """
         self.prompt_language=language
         self.n_shot_examples=n_shot_prompt
+        self.enable_rewrite=enable_rewrite
 
     @abstractmethod
     def set_lang(self, language: str):
@@ -42,23 +45,6 @@ class BasePrompt(ABC):
         """
         raise NotImplementedError
 
-    @abstractmethod
-    def build_prompt(self,*args,**kwargs)->NoReturn:
-        """
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def init_prompt(self,*args,**kwargs)->NoReturn:
-        """
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        raise NotImplementedError
 
     @classmethod
     def __repr__(cls):

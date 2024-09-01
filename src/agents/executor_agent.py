@@ -15,13 +15,15 @@ from src.agents.meta.base_agent import BaseAgent
 
 
 class ExecutorAgent(BaseAgent):
-    model_name="executor"
     def __init__(self,
                  agent_name,
                  base_llm,
                  stream_chat,
                  **kwargs):
         super(ExecutorAgent,self).__init__(agent_name,base_llm,stream_chat,**kwargs)
+        self.agent_name="executor"
+
+
 
 
 

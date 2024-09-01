@@ -11,16 +11,17 @@
 # Description：
 """
 from abc import abstractmethod
-from .base_prompt import BasePrompt
+from src.prompt.meta.base_prompt import BasePrompt
 
 
 class LLMPrompt(BasePrompt):
-    def __init__(self,language,n_shot_prompt,*args,**kwargs):
-        super(LLMPrompt,self).__init__(language,n_shot_prompt,*args,**kwargs)
+    def __init__(self,language,n_shot_prompt,enable_rewrite,*args,**kwargs):
+        super(LLMPrompt,self).__init__(language,n_shot_prompt,enable_rewrite,*args,**kwargs)
         self.system_template=None
         self.requirements=None
         self.examples=None
         self.prompt=None
+        self.enable_rewrite=enable_rewrite
 
     def set_lang(self,language:str):
         """
@@ -36,27 +37,8 @@ class LLMPrompt(BasePrompt):
         """
         self.n_shot_examples=value
 
-    def build_prompt(self,agent_name,input, *args, **kwargs):
-        """
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        memory_obj = kwargs.get("memory",None)
-        if agent_name=="executor":
-            pass
-        elif agent_name=="searcher":
-            if memory_obj is None:
-                raise ModuleNotFoundError
-
-
-        elif agent_name=="refiner":
-            pass
-        else:
-            raise NotImplementedError
-
-
-    def init_prompt(self, *args, **kwargs):
+    @abstractmethod
+    def build_prompt(self,input,*args, **kwargs):
         """
         :param args:
         :param kwargs:

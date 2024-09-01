@@ -33,8 +33,5 @@ class GraphMemory(MetaMemory):
     def query(self, question, *args, **kwargs):
         pass
 
-    def reorder(self, *args, **kwargs):
-        pass
-
     def update(self, *args, **kwargs):
         pass

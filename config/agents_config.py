@@ -35,6 +35,7 @@ class AgentSystemConfig:
         self.n_shot_prompt=n_shot
         self.language=language
         # Todo
+        self.enable_rewrite=False
         self.retrieval_technique=None
 
 
@@ -48,12 +49,12 @@ class MultiAgentSysConfig:
         self.is_remote_llm=[True,True,True]
 
         # model config
-        self.llm_based=[True,True,True]
-        self.llm_model_type=["chatgpt","chatgpt","chatgpt"]
-        self.llm_model_path_or_name=["xx","xx","xxx"]
+        self.llm_model_type=["chatgpt","chatgpt","chatgpt"] #["qwen2","qwen2","qwen2"]
+        self.llm_model_path_or_name=[None,None,None] #["Qwen/Qwen2-7B-Instruct","Qwen/Qwen2-7B-Instruct","Qwen/Qwen2-7B-Instruct"]
         self.top_p=0
         self.top_k=1
         self.temperature=0
+        self.max_token=4096
 
         # tool config
         self.is_remote_call=True
@@ -78,6 +79,7 @@ class SingleAgentConfig:
         self.top_p = 0
         self.top_k = 1
         self.temperature = 0
+        self.max_token = 4096
 
         # tool config
         self.is_remote_call = True

@@ -15,7 +15,7 @@ from abc import ABC,abstractmethod
 
 
 class BaseModel(ABC):
-    def __init__(self,model_type,model_name,is_remote_llm,**kwargs):
+    def __init__(self,model_type,is_remote_llm,model_config,*args,**kwargs):
         """
         :param model_type:
         :param model_name:
@@ -23,21 +23,28 @@ class BaseModel(ABC):
         :param kwargs:
         """
         self.model_type=model_type
-        self.model_name=model_name
         self.is_remote_llm=is_remote_llm
+        self.model_config=model_config
         self.kwargs=kwargs
 
 
-    def generate(self,*args,**kwargs):
-        return self._generate(*args,**kwargs)
+    def generate(self,model_name, prompt,max_token,*args,**kwargs):
+        return self._generate(model_name, prompt,max_token,*args,**kwargs)
 
 
     @abstractmethod
-    def _generate(self,*args,**kwargs):
+    def _generate(self,model_name, prompt,max_token,*args,**kwargs):
         raise NotImplementedError
 
 
+    @abstractmethod
+    def _check_config(self,*args,**kwargs):
+        raise NotImplementedError
+
+    @abstractmethod
     def __repr__(self):
         info="This is meta class for model classes"
         return info
+
+
 

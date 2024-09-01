@@ -34,17 +34,17 @@ class BaseAgent(MetaAgent):
         self.stream_chat=stream_chat
         self.kwargs=kwargs
 
-    def run(self,prompt_generator,*args,**kwargs):
+    def run(self,prompt_generator,input,model_name,max_token,*args,**kwargs):
         """
         :param prompt_generator:
         :param args:
         :param kwargs:
         :return:
         """
-        return self._run(prompt_generator,*args,**kwargs)
+        return self._run(prompt_generator,input,model_name,max_token,*args,**kwargs)
 
 
-    def _run(self,prompt_generator,input,*args, **kwargs):
+    def _run(self,prompt_generator,input,model_name,max_token,*args, **kwargs):
         """
         :param prompt_generator:
         :param input:
@@ -58,8 +58,8 @@ class BaseAgent(MetaAgent):
         else:
             raise ValueError
 
-        input_prompt=prompt_generator.build_prompt(self.agent_name,input,*args,**kwargs)
-        output=self.llm_model.generate(input_prompt)
+        prompt=prompt_generator.build_prompt(self.agent_name,input,*args,**kwargs)
+        output=self.llm_model.generate(model_name, prompt,max_token)
         return output
 
     def __repr__(self,*args, **kwargs):

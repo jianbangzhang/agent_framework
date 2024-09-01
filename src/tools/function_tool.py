@@ -2,7 +2,7 @@
 # -*-coding:utf-8 -*-
 
 """
-# File       : tool1.py
+# File       : function_tool.py
 # Time       ：2024/8/25 22:13
 # Author     ：jianbang
 # version    ：python 3.10
