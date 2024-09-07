@@ -10,14 +10,14 @@
 # emil       : whdx072018@foxmail.com
 # Description：
 """
-from base_model import BaseModel
+from .base_model import BaseModel
 import openai
 import os
 
 
 
 class ChatGPT(BaseModel):
-    def __init__(self,model_type,is_remote_llm,model_config,*args,**kwargs):
+    def __init__(self, model_type, is_remote_llm, model_config, *args, **kwargs):
         """
         :param model_type:
         :param model_name:
@@ -26,12 +26,11 @@ class ChatGPT(BaseModel):
         :param args:
         :param kwargs:
         """
-        super(ChatGPT, self).__init__(model_type,is_remote_llm,model_config,*args,**kwargs)
-        openai.api_key=os.environ.get("api_key")
+        super(ChatGPT, self).__init__(model_type, is_remote_llm, model_config, *args, **kwargs)
+        openai.api_key = os.environ.get("api_key")
         self._check_config()
 
-
-    def _call_openai(self,model_engine, prompt,max_token,*args,**kwargs):
+    def _call_openai(self, model_engine, prompt, max_token, *args, **kwargs):
         """
         :param prompt:
         :param max_token:
@@ -39,25 +38,29 @@ class ChatGPT(BaseModel):
         :param kwargs:
         :return:
         """
-        temperature=self.model_config["temperature"]
-        top_k=self.model_config["top_k"]
-        response = openai.Completion.create(
-            engine=model_engine,
-            prompt=prompt,
+        temperature = self.model_config["temperature"]
+        top_p = self.model_config["top_p"]
+
+        response = openai.ChatCompletion.create(
+            model=model_engine,
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt}
+            ],
             max_tokens=max_token,
             temperature=temperature,
-            top_k=top_k
+            top_p=top_p
         )
-        return response.choices[0].text.strip()
 
-    def _generate(self,model_name, prompt,max_token,*args,**kwargs):
-        raise self._call_openai(model_name, prompt,max_token,*args,**kwargs)
+        answer = response.choices[0].message['content'].strip()
+        return answer
 
+    def _generate(self, model_name, prompt, max_token, *args, **kwargs):
+        return self._call_openai(model_name, prompt, max_token, *args, **kwargs)
 
-    def _check_config(self,*args,**kwargs):
-        if self.model_type=="chatgpt" and not self.is_remote_llm:
-            raise ValueError("Chatgpt can't be deploied locally!")
-
+    def _check_config(self, *args, **kwargs):
+        if self.model_type == "chatgpt" and not self.is_remote_llm:
+            raise ValueError("Chatgpt can't be deployed locally!")
 
     def __repr__(self):
         info = "This is gpt model."

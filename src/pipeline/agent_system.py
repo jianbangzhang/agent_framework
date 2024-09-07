@@ -17,14 +17,13 @@ from src.prompt import PromptFactory
 from src.memory import MemoryFactory
 from src.tools import BaseTool
 from src.action import Action
-from src.models import BaseModel
+from src.models import ModelFactory
 from utils import retry
 
 
 class Pipeline(ABC):
     def __init__(self,*args,**kwargs):
         self.agent_container=dict()
-        self.result=None
         self.splitter="\n"
         self.msg="[Running Info]:"+self.splitter
 
@@ -88,7 +87,7 @@ class AgentPipeline(Pipeline):
         self.is_remote_llm=detailed_config.is_remote_llm
         self.llm_model_type=detailed_config.llm_model_type
         self.llm_model_path_or_name=detailed_config.llm_model_path_or_name
-        self.top_k=detailed_config.top_k
+        self.top_p=detailed_config.top_p
         self.temperature=detailed_config.temperature
         self.max_token = detailed_config.max_token
         self.is_remote_call=detailed_config.is_remote_call
@@ -114,10 +113,10 @@ class AgentPipeline(Pipeline):
         :return:
         """
         self.msg = "[build model instance]:"+self.splitter
-        model_config={"top_k":self.top_k,
+        model_config={"top_p":self.top_p,
                       "temperature":self.temperature}
 
-        self.llm_model=BaseModel(self.llm_model_type,self.is_remote_llm,model_config)
+        self.llm_model=ModelFactory(self.llm_model_type,self.is_remote_llm,model_config)
 
 
     def _setup_agents(self, *args, **kwargs):
@@ -132,7 +131,7 @@ class AgentPipeline(Pipeline):
 
     def _setup_prompt_generator(self, *args, **kwargs):
         self.msg+="[build prompt generator instance]:"+self.splitter
-        self.prompt_generator_obj=PromptFactory(self.language,self.n_shot_prompt,self.enable_rewrite,*args,**kwargs)
+        self.prompt_generator_obj=PromptFactory(self.memory_type,self.language,self.n_shot_prompt,self.enable_rewrite,*args,**kwargs)
 
     def _setup_tool_and_action(self, *args, **kwargs):
         self.msg += "[build tool and action instance]:"+self.splitter
@@ -146,8 +145,8 @@ class AgentPipeline(Pipeline):
 
 
     def run(self,user_question,*args, **kwargs):
-        self._process(user_question,*args, **kwargs)
-        return self.result
+        result=self._process(user_question,*args, **kwargs)
+        return result
 
 
     def _process(self,user_question,*args, **kwargs):
@@ -157,16 +156,18 @@ class AgentPipeline(Pipeline):
 
         if self.system_type=="multi_agents":
             assert len(self.agent_container)==3,"Multi-agent system must has 3 agents."
-            self.result=self._process_multi_agents(user_question,*args, **kwargs)
+            result=self._process_multi_agents(user_question,*args, **kwargs)
 
         elif self.system_type=="single_agent":
             assert len(self.agent_container) == 1, "Single-agent system must has 1 agent."
-            self.result=self._process_single_agent(user_question,*args, **kwargs)
+            result=self._process_single_agent(user_question,*args, **kwargs)
         else:
             raise NotImplementedError
 
+        return result
 
-    def _agent_output(self,agent_obj,input,model_name):
+
+    def _agent_output(self,agent_obj,prompt,model_type,model_name):
         """
         :param agent_obj:
         :param prompt_generator_obj:
@@ -175,7 +176,7 @@ class AgentPipeline(Pipeline):
         :param max_token:
         :return: prompt_generator,input_prompt=input_prompt,memory=memory
         """
-        output=agent_obj.run(self.prompt_generator_obj,input,model_name,self.max_token)
+        output=agent_obj.run(prompt,model_type,model_name,self.max_token)
         return output
 
     @retry(max_retry=3, delay=0)
@@ -259,7 +260,7 @@ class AgentPipeline(Pipeline):
 
 
 
-    def _process_single_agent(self,*args, **kwargs):
+    def _process_single_agent(self,user_question,*args, **kwargs):
         """
         :param args:
         :param kwargs:
@@ -269,15 +270,17 @@ class AgentPipeline(Pipeline):
         prompt_type="single"
         executor_agent = self.agent_container[agent_names[0]]
         executor_base_llm=self.llm_model_path_or_name[0]
+        model_type=self.llm_model_type[0]
 
         history = []
         is_finish = False
-        init_prompt = self.prompt_generator_obj.generate_prompt(prompt_type,input)
+
+        init_prompt = self.prompt_generator_obj.generate_prompt(prompt_type,user_question)
         llm_input=init_prompt
         self.msg+=f"[agent input]:{self.splitter}{init_prompt}"
         history.append(init_prompt)
         while not is_finish:
-            llm_out = self._agent_output(executor_agent,llm_input,executor_base_llm)
+            llm_out = self._agent_output(executor_agent,llm_input,model_type,executor_base_llm)
             self.msg += f"[agent output]:{self.splitter}{llm_out}"
             history.append(llm_out)
 

@@ -54,3 +54,7 @@ class SearcherPrompt(LLMPrompt):
             raise NotImplementedError
         if self.n_shot_examples != 0:
             raise ValueError
+
+
+    def set_lang(self,language:str):
+        self.prompt_language=language

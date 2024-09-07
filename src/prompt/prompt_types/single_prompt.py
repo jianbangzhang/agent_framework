@@ -28,19 +28,20 @@ class SinglePrompt(LLMPrompt):
         self.system_template = SINGLE_SYSTEM_TEMPLATES
         self._check_config()
 
-    def build_prompt(self, input, *args, **kwargs):
+    def build_prompt(self, inputs, *args, **kwargs):
         """
         :param agent_name:
-        :param input:
+        :param inputs:
         :param args:
         :param kwargs:
         :return:
         """
         self._set_requirements()
-        self.prompt = self.system_template + "\n"
-        self.prompt += self.requirements + "\n"
-        self.prompt += self.examples + "\n"
-        self.prompt += f"现在开始：\n输入用户问题：{input}\n输出：\n"
+        self.prompt = self.system_template + "\n\n"
+        self.prompt += self.requirements + "\n\n"
+        self.prompt += self.examples + "\n\n" if self.examples is not None else ""
+        self.prompt += f"现在开始：\n输入用户问题：{inputs}\n输出：\n"
+        return self.prompt
 
     def _set_requirements(self):
         self.requirements = SINGLE_REQUIREMENTS
@@ -54,3 +55,6 @@ class SinglePrompt(LLMPrompt):
             raise NotImplementedError
         if self.n_shot_examples != 1:
             raise ValueError
+
+    def set_lang(self,language:str):
+        self.prompt_language=language

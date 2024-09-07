@@ -34,32 +34,28 @@ class BaseAgent(MetaAgent):
         self.stream_chat=stream_chat
         self.kwargs=kwargs
 
-    def run(self,prompt_generator,input,model_name,max_token,*args,**kwargs):
+    def run(self,prompt,model_type,model_name,max_token,*args,**kwargs):
         """
         :param prompt_generator:
         :param args:
         :param kwargs:
         :return:
         """
-        return self._run(prompt_generator,input,model_name,max_token,*args,**kwargs)
+        return self._run(prompt,model_type,model_name,max_token,*args,**kwargs)
 
 
-    def _run(self,prompt_generator,input,model_name,max_token,*args, **kwargs):
+    def _run(self,prompt,model_type,model_name,max_token,*args, **kwargs):
         """
-        :param prompt_generator:
+        :param prompt:
         :param input:
+        :param model_name:
+        :param max_token:
         :param args:
         :param kwargs:
         :return:
         """
-        language=kwargs.get("language","zh")
-        if language=="zh" or language=="en":
-            prompt_generator.set_lang(language)
-        else:
-            raise ValueError
 
-        prompt=prompt_generator.build_prompt(self.agent_name,input,*args,**kwargs)
-        output=self.llm_model.generate(model_name, prompt,max_token)
+        output=self.llm_model.generate(model_type,model_name, prompt,max_token)
         return output
 
     def __repr__(self,*args, **kwargs):

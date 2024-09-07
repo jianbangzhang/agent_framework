@@ -37,11 +37,11 @@ class PromptFactory(object):
         if agent_name=="refiner" and self.memory_obj is None:
             raise ValueError
 
-        self._setup_instance(agent_name,input,retrieve_content,*args,**kwargs)
+        self.build_prompt(agent_name,input,retrieve_content,*args,**kwargs)
         return self.prompt
 
 
-    def _setup_instance(self,agent_name,input,retrieve_content=None,*args,**kwargs):
+    def build_prompt(self,agent_name,input,retrieve_content=None,*args,**kwargs):
         """
         :param agent_name:
         :return:
@@ -60,4 +60,13 @@ class PromptFactory(object):
             self.prompt = agent_obj.build_prompt(input)
         else:
             raise NotImplementedError
+
+    def set_lang(self,language):
+        """
+        :param language:
+        :return:
+        """
+        self.prompt.set_lang(language)
+
+
 

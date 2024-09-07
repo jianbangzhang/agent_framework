@@ -63,3 +63,6 @@ class RefinerPrompt(LLMPrompt):
             raise NotImplementedError
         if self.n_shot_examples!=1:
             raise ValueError
+
+    def set_lang(self,language:str):
+        self.prompt_language=language

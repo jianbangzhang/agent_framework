@@ -12,11 +12,11 @@
 """
 
 class AgentSystemConfig:
-    def __init__(self,system_type="single_agents",
+    def __init__(self,system_type="single_agent",
                  enable_multi_turns=True,
                  has_memory=True,
                  memory_type="graph",
-                 language="en",
+                 language="zh",
                  n_shot=1):
         """
         :param system_type:
@@ -51,8 +51,7 @@ class MultiAgentSysConfig:
         # model config
         self.llm_model_type=["chatgpt","chatgpt","chatgpt"] #["qwen2","qwen2","qwen2"]
         self.llm_model_path_or_name=["gpt-3.5-turbo","gpt-3.5-turbo","gpt-3.5-turbo"] #["Qwen/Qwen2-7B-Instruct","Qwen/Qwen2-7B-Instruct","Qwen/Qwen2-7B-Instruct"]
-        self.top_p=0
-        self.top_k=1
+        self.top_p=0.7
         self.temperature=0
         self.max_token=4096
 
@@ -75,8 +74,8 @@ class SingleAgentConfig:
         # model config
         self.llm_based = [True]
         self.llm_model_type = ["chatgpt"]
-        self.llm_model_path = ["gpt-3.5-turbo"]
-        self.top_k = 1
+        self.llm_model_path_or_name=["gpt-3.5-turbo"]
+        self.top_p = 0.7
         self.temperature = 0
         self.max_token = 4096
 

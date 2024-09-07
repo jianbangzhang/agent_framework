@@ -23,6 +23,7 @@ class LLMPrompt(BasePrompt):
         self.prompt=None
         self.enable_rewrite=enable_rewrite
 
+    @abstractmethod
     def set_lang(self,language:str):
         """
         :param language:

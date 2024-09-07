@@ -31,17 +31,14 @@ class BaseModel(ABC):
     def generate(self,model_name, prompt,max_token,*args,**kwargs):
         return self._generate(model_name, prompt,max_token,*args,**kwargs)
 
-
     @abstractmethod
     def _generate(self,model_name, prompt,max_token,*args,**kwargs):
         raise NotImplementedError
 
 
-    @abstractmethod
     def _check_config(self,*args,**kwargs):
         raise NotImplementedError
 
-    @abstractmethod
     def __repr__(self):
         info="This is meta class for model classes"
         return info

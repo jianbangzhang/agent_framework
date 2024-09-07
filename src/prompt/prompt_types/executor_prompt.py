@@ -56,7 +56,10 @@ class ExecuatorPrompt(LLMPrompt):
         :param content:
         :return:
         """
-        self.examples=EXECUATOR_EXAMPLES+"\n"+content
+        if content is None:
+            self.examples = EXECUATOR_EXAMPLES
+        else:
+            self.examples=EXECUATOR_EXAMPLES+"\n"+content
 
 
     def _check_config(self):
@@ -67,3 +70,6 @@ class ExecuatorPrompt(LLMPrompt):
             raise NotImplementedError
         if self.n_shot_examples!=1:
             raise ValueError
+
+    def set_lang(self,language:str):
+        self.prompt_language=language
