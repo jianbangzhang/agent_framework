@@ -11,6 +11,7 @@
 # Description：
 """
 from .graph_memory import GraphMemory
+from .text_memory import TextMemory
 
 
 class MemoryFactory(object):
@@ -18,9 +19,14 @@ class MemoryFactory(object):
         pass
 
     def build_memory(self,memory_type,*args,**kwargs):
-        # todo
+        """
+        :param memory_type:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         if memory_type=="graph":
-            memory=GraphMemory(*args,**kwargs)
+            self.memory=GraphMemory(*args,**kwargs)
         else:
-            raise NotImplementedError
-        return memory
+            self.memory=TextMemory(*args,**kwargs)
+

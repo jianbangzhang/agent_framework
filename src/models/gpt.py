@@ -12,6 +12,7 @@
 """
 from base_model import BaseModel
 import openai
+import os
 
 
 
@@ -26,10 +27,11 @@ class ChatGPT(BaseModel):
         :param kwargs:
         """
         super(ChatGPT, self).__init__(model_type,is_remote_llm,model_config,*args,**kwargs)
+        openai.api_key=os.environ.get("api_key")
         self._check_config()
 
 
-    def _call_openai(model_engine, prompt,max_token,*args,**kwargs):
+    def _call_openai(self,model_engine, prompt,max_token,*args,**kwargs):
         """
         :param prompt:
         :param max_token:
@@ -37,10 +39,14 @@ class ChatGPT(BaseModel):
         :param kwargs:
         :return:
         """
+        temperature=self.model_config["temperature"]
+        top_k=self.model_config["top_k"]
         response = openai.Completion.create(
             engine=model_engine,
             prompt=prompt,
-            max_tokens=max_token
+            max_tokens=max_token,
+            temperature=temperature,
+            top_k=top_k
         )
         return response.choices[0].text.strip()
 

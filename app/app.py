@@ -22,7 +22,12 @@ from utils import print_args,print_env
 
 
 
+
 def run_agent(user_question):
+    """
+    :param user_question:
+    :return:
+    """
     env_config_info=EnvironmentConfig.info
     logger = AutoLevelLogger()
 
@@ -50,4 +55,5 @@ def run_agent(user_question):
 
 
 if __name__ == '__main__':
-    run_agent()
+    user_question="XXXX"
+    run_agent(user_question)

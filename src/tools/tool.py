@@ -49,10 +49,6 @@ class BaseTool(metaclass=MetaClass):
         for subclass in cls.__subclasses__():
             if hasattr(subclass, 'name') and subclass.name == subclass_name:
                 observation,code=subclass()(*args, **kwargs)
-                if "businessResult" in observation:
-                    del observation["businessResult"]
-                if "reminder" in observation and observation["reminder"] is None:
-                    del observation["reminder"]
                 return observation,code
             else:
                 continue

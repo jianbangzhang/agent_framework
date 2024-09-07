@@ -88,7 +88,6 @@ class AgentPipeline(Pipeline):
         self.is_remote_llm=detailed_config.is_remote_llm
         self.llm_model_type=detailed_config.llm_model_type
         self.llm_model_path_or_name=detailed_config.llm_model_path_or_name
-        self.top_p=detailed_config.top_p
         self.top_k=detailed_config.top_k
         self.temperature=detailed_config.temperature
         self.max_token = detailed_config.max_token
@@ -115,8 +114,7 @@ class AgentPipeline(Pipeline):
         :return:
         """
         self.msg = "[build model instance]:"+self.splitter
-        model_config={"top_p":self.top_p,
-                      "top_k":self.top_k,
+        model_config={"top_k":self.top_k,
                       "temperature":self.temperature}
 
         self.llm_model=BaseModel(self.llm_model_type,self.is_remote_llm,model_config)

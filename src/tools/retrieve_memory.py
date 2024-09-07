@@ -17,7 +17,7 @@ from typing import Dict,Tuple,Union
 
 
 
-class CinemaFindTool(BaseTool):
+class RetrieveTool(BaseTool):
     name = "retrieve_memory_api"
     is_remote=True
     description="这是一个memory检索工具"
@@ -47,5 +47,7 @@ class CinemaFindTool(BaseTool):
         :param kwargs:
         :return:
         """
-        n_example=memory_obj.query(user_question,rewrite_question=rewrite_question,*args, **kwargs)
+        n_example=memory_obj.query(user_question,
+                rewrite_question=rewrite_question,*args, **kwargs)
+
         return {"result": n_example}

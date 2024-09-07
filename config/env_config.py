@@ -18,10 +18,10 @@ root_folder_path = os.path.dirname(os.path.dirname(current_file_path))
 
 
 class EnvironmentConfig:
-    api_key="xxxx"
+    api_key="XXXX"
     is_multi_turns="true"
     info=f"Set environment varibles:\n\tAPI_KEY:{api_key}\n\tEnableMultiTurns:{is_multi_turns}\n\tProjectPath:{root_folder_path}\n"
-    os.environ["api_key"]="xxxx"
+    os.environ["api_key"]=api_key
     os.environ["enable_multi_turns"]='true'
     os.environ["project_path"]=root_folder_path
 
