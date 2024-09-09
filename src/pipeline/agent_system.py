@@ -81,10 +81,11 @@ class AgentPipeline(Pipeline):
         self.enable_multi_turns=config.enable_multi_turns
         self.has_memory = config.has_memory
         self.memory_type = config.memory_type
+        self.memory_size = config.memory_size
+        self.retrieval_technique = config.retrieval_technique
         self.n_shot_prompt = config.n_shot_prompt
         self.language = config.language
         self.enable_rewrite=config.enable_rewrite
-        self.retrieval_technique = config.retrieval_technique
         detailed_config=config.detailed_config
         self.agent_type=detailed_config.agent_type
         self.num_agents=detailed_config.num_agents
@@ -120,7 +121,6 @@ class AgentPipeline(Pipeline):
         self.msg = "[build model instance]:"+self.splitter
         model_config={"top_p":self.top_p,
                       "temperature":self.temperature}
-
         self.llm_model=ModelFactory(self.llm_model_type,self.is_remote_llm,model_config)
 
 
@@ -147,6 +147,7 @@ class AgentPipeline(Pipeline):
     def _setup_momery(self, *args, **kwargs):
         self.msg += "[build prompt generator instance]:"+self.splitter
         self.memory_obj=MemoryFactory(*args,**kwargs)
+        self.memory_obj.build_memory(self.memory_type,self.memory_size,self.retrieval_technique,self.n_shot_prompt)
 
 
     def run(self,user_question,*args, **kwargs):
@@ -191,30 +192,38 @@ class AgentPipeline(Pipeline):
         :return:
         """
         def get_answer(input_text):
-            if "Thought" in input_text and "Finish" in input_text:
-                answer=[line.replace("Finish:").strip() for line in input_text.split("\n") if "Finish:" in line]
+            if "Observation" in input_text or not ("Thought" in input_text and "Finish" in input_text):
+                answer=""
+                code=-1
+            elif "Thought" in input_text and "Finish" in input_text:
+                answer_lst=[line.replace("Finish:","").strip() for line in input_text.split("\n") if "Finish:" in line]
+                answer=answer_lst[0]
+                code=0
             else:
                 answer=input_text
-            return answer
+                code=0
+            return answer,code
 
         history=[]
         init_prompt = self.prompt_generator_obj.generate_prompt(searcher_agent.agent_name, user_question,memory=self.memory_obj)
         search_agent_output=self._agent_output(searcher_agent,init_prompt,searcher_base_model,model_name)
         history.append(init_prompt)
+        history.append(search_agent_output)
 
         api, param = self.action_obj.parse(search_agent_output, *args, **kwargs)
-        param.update({"memory":self.memory_obj})
-        observation_value = self.tool_obj.execute(api, **param)
+        observation_value,code = self.tool_obj.execute(api, **param,memory=self.memory_obj)
         observation = f"Observation: {observation_value}"
         history.append(observation)
 
         search_agent_input="\n".join(history)
-        search_agent_finish=self._agent_output(searcher_agent,search_agent_input,searcher_base_model)
-        answer=get_answer(search_agent_finish)
+        search_agent_finish=self._agent_output(searcher_agent,search_agent_input,searcher_base_model,model_name)
+        answer,code=get_answer(search_agent_finish)
+        answer=answer if code==0 else observation_value
         return answer
 
 
-    def _process_multi_agents(self,user_question,*args, **kwargs):
+
+    def _process_multi_agents(self,user_question,tool_lst=None,*args, **kwargs):
         """
         :param user_question:
         :param args:
@@ -237,17 +246,18 @@ class AgentPipeline(Pipeline):
 
         history=[]
         is_finish=False
-
-        n_shot_examples=self._get_examples(user_question,searcher_agent,searcher_base_model,searcher_model_name,*args, **kwargs)
+        tool_lst, _ = self.tool_obj.execute("retrieve_api", user_question=user_question,observation=False) if tool_lst is None else tool_lst
+        tool_text = self.splitter.join([f"{i + 1}.{tool}" for i, tool in enumerate(tool_lst)])
+        n_shot_examples,code=self._get_examples(user_question,searcher_agent,searcher_base_model,searcher_model_name,*args, **kwargs)
         self.msg += f"[Retrieve]:{self.splitter}{n_shot_examples}"+self.splitter
 
-        init_prompt=self.prompt_generator_obj.generate_prompt(self,executor_agent.agent_name,input,retrieve_content=n_shot_examples)
+        init_prompt=self.prompt_generator_obj.generate_prompt(executor_agent.agent_name,user_question,tool=tool_text,retrieve_content=n_shot_examples)
         llm_input=init_prompt
         self.msg+=f"[Exec input]:{self.splitter}{init_prompt}"+self.splitter
         history.append(init_prompt)
 
         while not is_finish:
-            llm_out=self._agent_output(executor_agent,llm_input,executor_base_llm)
+            llm_out=self._agent_output(executor_agent,llm_input,executor_base_llm,executor_model_name)
             self.msg+=f"[Exec output]:{self.splitter}{llm_out}"
             history.append(llm_out)
 
@@ -256,17 +266,17 @@ class AgentPipeline(Pipeline):
                 is_finish=True
             else:
                 is_finish=False
-                observation_value=self.tool_obj.execute(api,**param)
+                observation_value,code=self._get_observation(api, param)
                 observation=f"Observation: {observation_value}"
                 history.append(observation)
                 llm_input = self.splitter.join(history)
 
-        reflexion=self._agent_output(refiner_agent,history,refiner_base_model)
-        refiner_agent.save2memory(reflexion,self.memory_obj)
+        history_text=user_question+"\n"+"\n".join(history[1:])
+        refiner_llm_input = self.prompt_generator_obj.generate_prompt(refiner_agent.agent_name, history_text)
+        reflexion=self._agent_output(refiner_agent,refiner_llm_input,refiner_base_model,refiner_model_name)
+        refiner_agent.save2memory(user_question,reflexion,self.memory_obj)
         self.msg+=f"[Refiner]:{self.splitter}{reflexion}{self.splitter}save to memory"
         return self.splitter.join(history)
-
-
 
 
     def _process_single_agent(self,user_question,tool_lst=None,*args, **kwargs):

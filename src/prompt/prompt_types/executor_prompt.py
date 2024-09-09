@@ -44,7 +44,7 @@ class ExecuatorPrompt(LLMPrompt):
         self.prompt+=self.tool_text+"\n\n"
         self.prompt+=self.requirements+"\n\n"
         self.prompt+=self.examples+"\n\n"
-        self.prompt+=f"现在开始：\n输入用户问题：{input}\n输出：\n"
+        self.prompt+=f"禁止输出无关内容，现在开始：\n输入用户问题：{input}\n输出：\n"
         return self.prompt
 
 
@@ -62,7 +62,7 @@ class ExecuatorPrompt(LLMPrompt):
         if content is None:
             self.examples = EXECUATOR_EXAMPLES
         else:
-            self.examples=EXECUATOR_EXAMPLES+"\n"+content
+            self.examples=EXECUATOR_EXAMPLES+"\n"+str(content)
 
 
     def _check_config(self):

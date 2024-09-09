@@ -28,18 +28,17 @@ class MetaMemory(ABC):
         self.n_shot=n_shot
 
     @abstractmethod
-    def save(self,content,*args,**kwargs):
+    def save(self,question,content,*args,**kwargs):
         raise NotImplementedError
 
 
     @abstractmethod
-    def query(self,question,*args,**kwargs):
+    def query(self,question,rewrite_query,*args,**kwargs):
         raise NotImplementedError
 
 
-    @abstractmethod
-    def update(self,*args,**kwargs):
-        raise NotImplementedError
+
+
 
 
 

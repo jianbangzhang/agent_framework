@@ -24,7 +24,7 @@ class RefinerAgent(BaseAgent):
         super(RefinerAgent,self).__init__(agent_type,llm,stream_chat,**kwargs)
         self.agent_name = "refiner"
 
-    def save2memory(self,content,memory):
+    def save2memory(self,user_question,content,memory):
         """
         :param content:
         :param memory:
@@ -33,5 +33,5 @@ class RefinerAgent(BaseAgent):
         """
         if memory is None:
             raise ValueError
-        memory.update(content)
+        memory.save(user_question,content)
 

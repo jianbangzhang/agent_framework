@@ -17,12 +17,12 @@ from typing import Dict,Tuple,Union
 
 
 
-class RetrieveTool(BaseTool):
+class RetrieveMemoryTool(BaseTool):
     name = "retrieve_memory_api"
     is_remote=True
     description="这是一个memory检索工具"
 
-    def __call__(self,user_question, rewrite_question,*args, **kwargs)->Tuple:
+    def __call__(self,user_question, rewrite_question=None,*args, **kwargs)->Tuple:
         """
         :param user_question:
         :param rewrite_question:
@@ -30,7 +30,7 @@ class RetrieveTool(BaseTool):
         :param kwargs:
         :return:
         """
-        memory_obj=kwargs.get("memory",None)
+        memory_obj=kwargs.get("memory")
         if memory_obj is None:
             raise ValueError
 

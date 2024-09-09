@@ -19,8 +19,8 @@ EXECUATOR_EXAMPLES="""##参考信息"""
 
 EXECUATOR_REQUIREMENTS="""## 输出格式
 Thought: 对于已有信息进行整合，并思考接下来应该做什么。
-Action: 将要采取的行动。
-Action_Parameter: 使用的工具API的输入参数。
+Action: 将要采取的行动，必须是提供的工具API名。
+Action_Parameter: 使用的工具API的输入参数(必须等待工具结果Observation)。
 Observation: 采取行动后得到的结果，也就是调用现有的工具得到的返回结果。
 ...（注意以上Thought/Action/Action_Parameter/Observation这个过程必须按顺序进行，并且可以重复进行多轮。）
 Thought: 已经获取到所需信息，可以进行对问题的回答。
@@ -64,40 +64,37 @@ REFINER_REQUIREMENTS_TRIPLETS="""正向反思输出按照问题及其对应的�
 REFINER_REQUIREMENTS_NATURAL="""正向反思输出按照问题、规划过程和回复3个方面。负向反思从tools using和 parameters passing 2个方面输出。"""
 
 REFINER_EXAMPLES_TRIPLETS="""【例子】
-暖气费这个月还剩多少？
-Thought: 需要查询暖气费的余额，所以先调用生活缴费余额查询工具。
-Action: get_living_balance_info_api
-Action_Parameter: {"type":["暖气费"]}
-Observation:{"result": [{"type": "暖气费", "balance": "80.00元"}],"reminder":"灵犀已为您查到，您当前账户暖气费余额80元，建议您及时充值。"}
-Thought: 已经查询到暖气费的余额，无需调用其他工具，现在可以回复给用户。
-Finish: 您好，灵犀已为您查到，您当前账户暖气费余额80元，建议您及时充值。
+Question: 你好，请问你们有哪些手机可以推荐？
+Thought: 用户需要推荐手机，现在调用商品推荐工具hm_product_recommend。
+Action: hm_product_recommend
+Action_Parameter: {'keywords_dict': {'商品类目': '手机'}}
+Observation: [{'sku_code': '10518244314', 'product_name': '小米11 Ultra 5G手机 256GB', 'bussiness_type': '标品', 'product_price': '5999', 'product_description': '拥有120Hz高刷新率和骁龙888处理器，还配备了高品质相机系统'},{'sku_code': '10222726664', 'product_name': 'vivo X60 Pro 5G手机 256GB', 'bussiness_type': '标品', 'product_price': '4498', 'product_description': '搭载Exynos 1080处理器与ZEISS联合调校的相机系统，拍照实力十足'}] 
+Thought: I now know the final answer
+Finish: 您好，我们有以下几款手机供您选择：1.小米11 Ultra 5G手机 256GB：价格为5999元，拥有120Hz高刷新率和骁龙888处理器，还配备了高品质相机系统；2. vivo X60 Pro 5G手机 256GB：售价为4498元，搭载Exynos 1080处理器与ZEISS联合调校的相机系统，拍照实力十足；这些手机都具有不同的特点和功能，您可以根据自己的需求进行选择。如果您有其他问题或需求，请随时告诉我。
 
-Positive reflecting:
-给你一个例子，你把它反思成三元组的形式：question:暖气费这个月还剩多少？ React: get_living_balance_info_api[
-param:type]-after-灵犀已为您查到，您当前账户暖气费余额XXX元，建议您及时充值。
 
-Negative reflecting:
-positive reacting: get_payment_balance_info_api[param: 暖气费]-after-灵犀已为您查到，您当前账户暖气费余额80元，建议您及时充值。
-negative reacting: get_living_balance_info_api[param: "type":"暖气费"]-after-参数传递错误。"""
+positive_reflection: 
+- React: hm_product_recommend[param:keywords_dict]-after-我们有以下几款手机供您选择：1.小米11 Ultra 5G手机 256GB：价格为5999元，拥有120Hz高刷新率和骁龙888处理器，还配备了高品质相机系统；2. vivo X60 Pro 5G手机 256GB：售价为4498元，搭载Exynos 1080处理器与ZEISS联合调校的相机系统，拍照实力十足；3. 华为畅享 20 Pro 5G手机 128GB：价格亲民，只需2699元即可拥有优秀的相机和4000mAh的电池容量。
+negative_reflection: 
+- positive reacting: hm_product_recommend[param: {'keywords_dict': {'商品类目': '手机'}}]-after-我们有以下几款手机供您选择：1.小米11 Ultra 5G手机 256GB：价格为5999元，拥有120Hz高刷新率和骁龙888处理器，还配备了高品质相机系统；2. vivo X60 Pro 5G手机 256GB：售价为4498元，搭载Exynos 1080处理器与ZEISS联合调校的相机系统，拍照实力十足。
+- negative reacting: hm_product_recommend[param: {'keywords_dict': '手机'}]-after-参数传递错误。", "negative reacting: hm_product_recommend[param: {'sku_code_list': ['手机']}]-after-参数传递错误。
+"""
 
 REFINER_EXAMPLES_NATURAL="""【例子】
-暖气费这个月还剩多少？
-Thought: 需要查询暖气费的余额，所以先调用生活缴费余额查询工具。
-Action: get_living_balance_info_api
-Action_Parameter: {"type":["暖气费"]}
-Observation:{"result": [{"type": "暖气费", "balance": "80.00元"}],"reminder":"灵犀已为您查到，您当前账户暖气费余额80元，建议您及时充值。"}
-Thought: 已经查询到暖气费的余额，无需调用其他工具，现在可以回复给用户。
-Finish: 您好，灵犀已为您查到，您当前账户暖气费余额80元，建议您及时充值。
-
-正向反思：
-给你一个例子，你把它反思成文本形式：question:暖气费这个月还剩多少？ 规划过程：先调用get_living_balance_info_api
-，入参type；回复：您好，灵犀已为您查到，您当前账户暖气费余额XXX元，建议您及时充值。 
+Question: 你好，请问你们有哪些手机可以推荐？
+Thought: 用户需要推荐手机，现在调用商品推荐工具hm_product_recommend。
+Action: hm_product_recommend
+Action_Parameter: {'keywords_dict': {'商品类目': '手机'}}
+Observation: [{'sku_code': '10518244314', 'product_name': '小米11 Ultra 5G手机 256GB', 'bussiness_type': '标品', 'product_price': '5999', 'product_description': '拥有120Hz高刷新率和骁龙888处理器，还配备了高品质相机系统'},{'sku_code': '10222726664', 'product_name': 'vivo X60 Pro 5G手机 256GB', 'bussiness_type': '标品', 'product_price': '4498', 'product_description': '搭载Exynos 1080处理器与ZEISS联合调校的相机系统，拍照实力十足'}] 
+Thought: I now know the final answer
+Finish: 您好，我们有以下几款手机供您选择：1.小米11 Ultra 5G手机 256GB：价格为5999元，拥有120Hz高刷新率和骁龙888处理器，还配备了高品质相机系统；2. vivo X60 Pro 5G手机 256GB：售价为4498元，搭载Exynos 1080处理器与ZEISS联合调校的相机系统，拍照实力十足；这些手机都具有不同的特点和功能，您可以根据自己的需求进行选择。如果您有其他问题或需求，请随时告诉我。
 
 
-负向反思【基于Graph】
-API相似度高：系统中可能存在其他用于查询余额的API，如get_account_balance_info_api或get_utility_balance_info_api，这些API名称和功能与get_living_balance_info_api非常接近，容易造成误调用。
-参数拼写错误：如果type参数中的值被拼写错误（如"dianfei"而不是"电费"），API可能无法识别该参数，导致查询失败。
-不完整或错误的参数设置：有些API可能需要多个参数共同传递，但如果遗漏了必需的参数或者误传了无关的参数，也可能导致API无法返回正确结果。"""
+positive_reflection: 
+- {"问题": "用户询问有哪些手机可以推荐。", "规划过程": "调用hm_product_recommend API，传入关键词字典{'商品类目': '手机'}。", "回复": "您好，我们有以下几款手机供您选择：1.小米11 Ultra 5G手机 256GB：价格为5999元，拥有120Hz高刷新率和骁龙888处理器，还配备了高品质相机系统；2. vivo X60 Pro 5G手机 256GB：售价为4498元，搭载Exynos 1080处理器与ZEISS联合调校的相机系统，拍照实力十足。这些手机都具有不同的特点和功能，您可以根据自己的需求进行选择。如果您有其他问题或需求，请随时告诉我。"}
+negative_reflection: 
+- {"tools_using": "API相似度高：系统中可能存在其他用于推荐商品的API，如hm_product_marketing或hm_product_info，这些API名称和功能与hm_product_recommend非常接近，容易造成误调用。", "parameters_passing": "参数拼写错误：如果keywords_dict参数中的值被拼写错误（如'商品类目'被拼写成'商品类别'），API可能无法识别该参数，导致查询失败。不完整或错误的参数设置：有些API可能需要多个参数共同传递，但如果遗漏了必需的参数或者误传了无关的参数，也可能导致API无法返回正确结果。"}
+"""
 
 
 # single

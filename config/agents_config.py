@@ -32,6 +32,8 @@ class AgentSystemConfig:
         self.detailed_config=MultiAgentSysConfig() if system_type=="multi_agents" else SingleAgentConfig()
         self.has_memory=has_memory
         self.memory_type=memory_type if has_memory else None
+        self.memory_size=100000
+        self.retrieval_technique="similarity"
         self.n_shot_prompt=n_shot
         self.language=language
         # Todo

@@ -16,7 +16,6 @@ from utils import retry
 from typing import Tuple
 import os
 import jieba
-import random
 from rouge_chinese import Rouge
 
 

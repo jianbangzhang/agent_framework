@@ -12,3 +12,4 @@
 """
 from .tool import BaseTool
 from .get_observation import RetrieveTool
+from .retrieve_memory import RetrieveMemoryTool

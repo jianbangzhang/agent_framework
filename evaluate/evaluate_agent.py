@@ -17,10 +17,17 @@ from rouge_chinese import Rouge
 
 class EvaluateAgent(object):
     def __init__(self,generate_agent_text:str,gold_agent_text:str):
+        """
+        :param generate_agent_text:
+        :param gold_agent_text:
+        """
         self.generate_agent_text=generate_agent_text
         self.gold_agent_text=gold_agent_text
 
     def evaluate(self):
+        """
+        :return:
+        """
         predict_agent_api_params,predict_agent_text=self.parse_tracjectory(self.generate_agent_text)
         gold_agent_api_params,gold_agent_text=self.parse_tracjectory(self.gold_agent_text)
 
@@ -40,8 +47,6 @@ class EvaluateAgent(object):
 
     def parse_tracjectory(self,text):
         """
-        gold_api_calls = [{"api": "get_weather", "location": "New York", "date": "2022-08-01"},{}]
-        agent_string str
         :param text:
         :return:
         """
@@ -86,10 +91,20 @@ class EvaluateAgent(object):
         return agent_api_params,agent_text
 
     def compute_em_score_api(self,predictions, gold_labels):
+        """
+        :param predictions:
+        :param gold_labels:
+        :return:
+        """
         predictions, gold_labels = [p["api"] for p in predictions], [g["api"] for g in gold_labels]
         return sum([1 if pred in gold_labels else 0 for pred in predictions]) / len(gold_labels)
 
     def compute_rouge_l_zh(self,predictions, gold_labels):
+        """
+        :param predictions:
+        :param gold_labels:
+        :return:
+        """
         evaluator = Rouge()
         predictions = ' '.join(jieba.cut(predictions))
         gold_labels = ' '.join(jieba.cut(gold_labels))
@@ -98,12 +113,22 @@ class EvaluateAgent(object):
         return rouge_l_f_score
 
     def compute_rouge_l_en(self,predictions, gold_labels):
+        """
+        :param predictions:
+        :param gold_labels:
+        :return:
+        """
         evaluator = rouge.Rouge(metrics=['rouge-l'])
         scores = evaluator.get_scores(predictions, gold_labels)
         rouge_l_f_score = scores[0]['rouge-l']['f']  # Accessing the first pair's f-score
         return rouge_l_f_score
 
     def compute_argument_f1(self,predictions, gold_labels):
+        """
+        :param predictions:
+        :param gold_labels:
+        :return:
+        """
         total_true_positives = 0  # Full Matches
         total_partial_true_positives = 0  # Half Matches
         total_predicted = 0
