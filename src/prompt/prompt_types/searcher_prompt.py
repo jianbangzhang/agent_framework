@@ -39,9 +39,10 @@ class SearcherPrompt(LLMPrompt):
         :return:
         """
         self._set_requirements()
-        self.prompt = self.system_template+"\n"
-        self.prompt += self.requirements+"\n"
-        self.prompt += f"现在开始:\n输入问题:{input}\n输出检索结果:\n"
+        self.prompt = self.system_template+"\n\n"
+        self.prompt += self.requirements+"\n\n"
+        self.prompt += f"禁止输出无关内容，现在开始:\n输入问题:{input}\n输出:\n"
+        return self.prompt
 
     def _set_requirements(self):
         self.requirements=SEARCHER_REQUIREMENTS
@@ -52,8 +53,7 @@ class SearcherPrompt(LLMPrompt):
         """
         if self.prompt_language == "en":
             raise NotImplementedError
-        if self.n_shot_examples != 0:
-            raise ValueError
+
 
 
     def set_lang(self,language:str):

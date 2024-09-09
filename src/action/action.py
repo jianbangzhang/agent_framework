@@ -119,9 +119,9 @@ class Action(BaseAction):
         tool_name = None
         param_dict = None
         if ActionToken in llm_output and ParamToken in llm_output:
-            if not self.is_finish(llm_output):
-                tool_name = getMsgFromText(llm_output, ActionToken, filter_token=True)
-                param_dict = getMsgFromText(llm_output, ParamToken, filter_token=True)
+            tool_name = getMsgFromText(llm_output, ActionToken, filter_token=True)
+            param_dict = getMsgFromText(llm_output, ParamToken, filter_token=True)
+            param_dict=eval(param_dict)
         return tool_name, param_dict
 
     def get_api_param(self, llm_output):

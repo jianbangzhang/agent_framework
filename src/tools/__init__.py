@@ -11,5 +11,4 @@
 # Description：
 """
 from .tool import BaseTool
-from .retrieve_memory import RetrieveTool
-from .get_observation import RetrieveObservation
+from .get_observation import RetrieveTool

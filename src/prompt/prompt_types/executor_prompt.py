@@ -26,6 +26,7 @@ class ExecuatorPrompt(LLMPrompt):
         """
         super(ExecuatorPrompt, self).__init__(language,n_shot_prompt,enable_rewrite,*args,**kwargs)
         self.system_template=EXECUATOR_SYSTEM_TEMPLATES
+        self.tool_text = kwargs.get("tool")
         self._check_config()
 
     def build_prompt(self,input, *args, **kwargs):
@@ -39,10 +40,12 @@ class ExecuatorPrompt(LLMPrompt):
         content=kwargs.get("retrieve_content")
         self._set_requirements()
         self._set_examples(content)
-        self.prompt=self.system_template+"\n"
-        self.prompt+=self.requirements+"\n"
-        self.prompt+=self.examples+"\n"
+        self.prompt=self.system_template+"\n\n"
+        self.prompt+=self.tool_text+"\n\n"
+        self.prompt+=self.requirements+"\n\n"
+        self.prompt+=self.examples+"\n\n"
         self.prompt+=f"现在开始：\n输入用户问题：{input}\n输出：\n"
+        return self.prompt
 
 
     def _set_requirements(self):

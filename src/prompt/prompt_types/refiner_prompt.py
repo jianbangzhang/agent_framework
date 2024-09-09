@@ -37,10 +37,11 @@ class RefinerPrompt(LLMPrompt):
 
         self._set_requirements(memory_type)
         self._set_examples(memory_type)
-        self.prompt=self.system_template+"\n"
-        self.prompt+=self.requirements+"\n"
-        self.prompt+=self.examples+"\n"
+        self.prompt=self.system_template+"\n\n"
+        self.prompt+=self.requirements+"\n\n"
+        self.prompt+=self.examples+"\n\n"
         self.prompt+=f"现在开始：\n输入：{input}\n输出：\n"
+        return self.prompt
 
 
     def _set_requirements(self,memory_type):

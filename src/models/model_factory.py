@@ -13,18 +13,7 @@
 from .qwen import QWen2Model
 from .gpt import ChatGPT
 
-# class ModelFactory:
-#     _class_map = {
-#         "qwen": QWen2Model,
-#         "chatgpt": ChatGPT,
-#     }
-#
-#     @staticmethod
-#     def create_instance(class_name,model_type,is_remote_llm,model_config,*args,**kwargs):
-#         if class_name in ModelFactory._class_map:
-#             return ModelFactory._class_map[class_name](model_type,is_remote_llm,model_config,*args,**kwargs)
-#         else:
-#             raise ValueError(f"Unknown class type: {class_name}")
+
 
 
 class ModelFactory(object):

@@ -55,8 +55,8 @@ def run_agent(user_question):
 
 
 if __name__ == '__main__':
-    api_key = "XXXXXXXX"
+    api_key = "XXXXXX"
     os.environ['api_key'] = api_key
-    user_question="武汉的天气"
+    user_question="我想听周杰伦的歌曲。"
     answer=run_agent(user_question)
     print(answer)

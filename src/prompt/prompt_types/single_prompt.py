@@ -26,6 +26,7 @@ class SinglePrompt(LLMPrompt):
         """
         super(SinglePrompt, self).__init__(language, n_shot_prompt, enable_rewrite, *args, **kwargs)
         self.system_template = SINGLE_SYSTEM_TEMPLATES
+        self.tool_text = kwargs.get("tool")
         self._check_config()
 
     def build_prompt(self, inputs, *args, **kwargs):
@@ -38,9 +39,10 @@ class SinglePrompt(LLMPrompt):
         """
         self._set_requirements()
         self.prompt = self.system_template + "\n\n"
+        self.prompt += self.tool_text + "\n\n"
         self.prompt += self.requirements + "\n\n"
         self.prompt += self.examples + "\n\n" if self.examples is not None else ""
-        self.prompt += f"现在开始：\n输入用户问题：{inputs}\n输出：\n"
+        self.prompt += f"禁止输出无关内容，现在开始：\n输入用户问题：{inputs}\n输出：\n"
         return self.prompt
 
     def _set_requirements(self):

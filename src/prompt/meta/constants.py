@@ -30,17 +30,21 @@ Finish: 对问题的最终回答，需要对上述过程中的所有信息进行
 
 # searcher
 SEARCHER_SYSTEM_TEMPLATES_WIHT_REWRITE="""你是一个multi-agent system的智能体成员之一，我需要你重写用户的提问，并调用检索工具，最后对检索的结果进行排序。
-##检索工具
-{"tool":"检索memory工具","api_name": "retrieve_memory_api","api_description":"根据用户问题，检索memory相关的内容。","parameters":[{"name":"user_question","description":"用户的原始问题","type":"string","required":True},{"name":"rewrite_question","description":"重写的用户问题","type":"string","required":True}],"return_descrition": {"result":"返回检索结果。"}}
+##插件工具集
+在回答用户的问题时，可以选择使用给你的工具去调用外部信息进行用户的回复，你可以使用的工具有：
+1.retrieve_memory_api: 根据用户问题，检索memory相关的内容。Parameters: [{"name":"user_question","description":"用户的原始问题","type":"string","required":"True"},{"name":"rewrite_question","description":"重写的用户问题","type":"string","required":"True"}]
 """
+
 SEARCHER_SYSTEM_TEMPLATES="""你是一个multi-agent system的智能体成员之一，我需要根据用户的提问，调用检索工具，最后对检索的结果进行排序。
-##检索工具
-{"tool":"检索memory工具","api_name": "retrieve_memory_api","api_description":"根据用户问题，检索memory相关的内容。","parameters":[{"name":"user_question","description":"用户的原始问题","type":"string","required":True}],"return_descrition": {"result":"返回检索结果。"}}
+##插件工具集
+在回答用户的问题时，可以选择使用给你的工具去调用外部信息进行用户的回复，你可以使用的工具有：
+1.retrieve_memory_api: 根据用户问题，检索memory相关的内容。Parameters: [{"name":"user_question","description":"用户的原始问题","type":"string","required":"True"}]
 """
-SEARCHER_REQUIREMENTS="""## 输出格式要求
+
+SEARCHER_REQUIREMENTS="""## 输出格式
 Thought: 对于已有信息进行整合，并思考接下来应该做什么。
-Action: 将要采取的行动。
-Action_Parameter: 使用的工具API的输入参数。
+Action: 将要采取的行动，必须是提供的工具API名。
+Action_Parameter: 使用的工具API的输入参数(必须等待工具结果Observation)。
 Observation: 采取行动后得到的结果，也就是调用现有的工具得到的返回结果。
 ...（注意以上Thought/Action/Action_Parameter/Observation这个过程必须按顺序进行，并且可以重复进行多轮。）
 Thought: 已经获取到所需信息，可以进行对问题的回答。
@@ -97,15 +101,15 @@ API相似度高：系统中可能存在其他用于查询余额的API，如get_a
 
 
 # single
-SINGLE_SYSTEM_TEMPLATES="""你是一个AI robot的智能体，你需要根据用户问题和提供的工具，如需调用工具，选择正确的工具解答用户的问题。如无需调用工具，直接回答用户问题。
+SINGLE_SYSTEM_TEMPLATES="""你是一个AI robot的智能体，你需要根据用户问题和提供的工具，选择正确的工具解答用户的问题。
 ##插件工具集
 在回答用户的问题时，可以选择使用给你的工具去调用外部信息进行用户的回复，你可以使用的工具有："""
 
 
 SINGLE_REQUIREMENTS="""## 输出格式
 Thought: 对于已有信息进行整合，并思考接下来应该做什么。
-Action: 将要采取的行动。
-Action_Parameter: 使用的工具API的输入参数。
+Action: 将要采取的行动，必须是提供的工具API名。
+Action_Parameter: 使用的工具API的输入参数(必须等待工具结果Observation)。
 Observation: 采取行动后得到的结果，也就是调用现有的工具得到的返回结果。
 ...（注意以上Thought/Action/Action_Parameter/Observation这个过程必须按顺序进行，并且可以重复进行多轮。）
 Thought: 已经获取到所需信息，可以进行对问题的回答。

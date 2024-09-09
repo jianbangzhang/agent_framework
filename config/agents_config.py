@@ -12,14 +12,14 @@
 """
 
 class AgentSystemConfig:
-    def __init__(self,system_type="single_agent",
+    def __init__(self,system_type="multi_agents",
                  enable_multi_turns=True,
                  has_memory=True,
                  memory_type="graph",
                  language="zh",
                  n_shot=1):
         """
-        :param system_type:
+        :param system_type:multi_agents
         :param enable_multi_turns:
         :param has_memory:
         :param memory_type: only when there is memory block,you can choose one element of list:["graph","natural"]
@@ -50,7 +50,7 @@ class MultiAgentSysConfig:
 
         # model config
         self.llm_model_type=["chatgpt","chatgpt","chatgpt"] #["qwen2","qwen2","qwen2"]
-        self.llm_model_path_or_name=["gpt-3.5-turbo","gpt-3.5-turbo","gpt-3.5-turbo"] #["Qwen/Qwen2-7B-Instruct","Qwen/Qwen2-7B-Instruct","Qwen/Qwen2-7B-Instruct"]
+        self.llm_model_path_or_name=["gpt-4o","gpt-4o","gpt-4o"] # gpt-3.5-turbo ["Qwen/Qwen2-7B-Instruct","Qwen/Qwen2-7B-Instruct","Qwen/Qwen2-7B-Instruct"]
         self.top_p=0.7
         self.temperature=0
         self.max_token=4096
@@ -74,7 +74,7 @@ class SingleAgentConfig:
         # model config
         self.llm_based = [True]
         self.llm_model_type = ["chatgpt"]
-        self.llm_model_path_or_name=["gpt-3.5-turbo"]
+        self.llm_model_path_or_name=["gpt-4o"]
         self.top_p = 0.7
         self.temperature = 0
         self.max_token = 4096

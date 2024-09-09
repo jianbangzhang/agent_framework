@@ -19,13 +19,18 @@ from src.tools import BaseTool
 from src.action import Action
 from src.models import ModelFactory
 from utils import retry
-
+from config.tool_config import ToolConfig
 
 class Pipeline(ABC):
     def __init__(self,*args,**kwargs):
         self.agent_container=dict()
+        self.tool_config=ToolConfig()
         self.splitter="\n"
         self.msg="[Running Info]:"+self.splitter
+
+    @property
+    def get_apis(self):
+        return [data_dict["api"] for data_dict in self.tool_config.tool_list]
 
     @abstractmethod
     def _init(self,*args,**kwargs):
@@ -180,7 +185,7 @@ class AgentPipeline(Pipeline):
         return output
 
     @retry(max_retry=3, delay=0)
-    def _get_examples(self,user_question,searcher_agent,searcher_base_model,*args, **kwargs):
+    def _get_examples(self,user_question,searcher_agent,searcher_base_model,model_name,*args, **kwargs):
         """
         :param search_agent_output:
         :return:
@@ -193,8 +198,8 @@ class AgentPipeline(Pipeline):
             return answer
 
         history=[]
-        init_prompt = self.prompt_generator_obj.generate_prompt(searcher_agent.agent_name, user_question)
-        search_agent_output=self._agent_output(searcher_agent,init_prompt,searcher_base_model)
+        init_prompt = self.prompt_generator_obj.generate_prompt(searcher_agent.agent_name, user_question,memory=self.memory_obj)
+        search_agent_output=self._agent_output(searcher_agent,init_prompt,searcher_base_model,model_name)
         history.append(init_prompt)
 
         api, param = self.action_obj.parse(search_agent_output, *args, **kwargs)
@@ -217,19 +222,23 @@ class AgentPipeline(Pipeline):
         :return:
         """
         agent_names=["executor","refiner","searcher"]
+        model_types=self.llm_model_type
         model_names=self.llm_model_path_or_name
 
         executor_agent=self.agent_container[agent_names[0]]
-        executor_base_llm=model_names[0]
+        executor_base_llm=model_types[0]
+        executor_model_name=model_names[0]
         refiner_agent=self.agent_container[agent_names[1]]
-        refiner_base_model=model_names[1]
+        refiner_base_model=model_types[1]
+        refiner_model_name=model_names[1]
         searcher_agent=self.agent_container[agent_names[2]]
-        searcher_base_model=model_names[2]
+        searcher_base_model=model_types[2]
+        searcher_model_name=model_names[2]
 
         history=[]
         is_finish=False
 
-        n_shot_examples=self._get_examples(user_question,searcher_agent,searcher_base_model,*args, **kwargs)
+        n_shot_examples=self._get_examples(user_question,searcher_agent,searcher_base_model,searcher_model_name,*args, **kwargs)
         self.msg += f"[Retrieve]:{self.splitter}{n_shot_examples}"+self.splitter
 
         init_prompt=self.prompt_generator_obj.generate_prompt(self,executor_agent.agent_name,input,retrieve_content=n_shot_examples)
@@ -260,7 +269,7 @@ class AgentPipeline(Pipeline):
 
 
 
-    def _process_single_agent(self,user_question,*args, **kwargs):
+    def _process_single_agent(self,user_question,tool_lst=None,*args, **kwargs):
         """
         :param args:
         :param kwargs:
@@ -274,8 +283,9 @@ class AgentPipeline(Pipeline):
 
         history = []
         is_finish = False
-
-        init_prompt = self.prompt_generator_obj.generate_prompt(prompt_type,user_question)
+        tool_lst,_=self.tool_obj.execute("retrieve_api",user_question=user_question,observation=False) if tool_lst is None else tool_lst
+        tool_text=self.splitter.join([f"{i+1}.{tool}" for i,tool in enumerate(tool_lst)])
+        init_prompt = self.prompt_generator_obj.generate_prompt(prompt_type,user_question,tool=tool_text)
         llm_input=init_prompt
         self.msg+=f"[agent input]:{self.splitter}{init_prompt}"
         history.append(init_prompt)
@@ -289,12 +299,19 @@ class AgentPipeline(Pipeline):
                 is_finish = True
             else:
                 is_finish = False
-                observation_value = self.tool_obj.execute(api, **param)
+                observation_value,code = self._get_observation(api,param)
                 observation = f"Observation: {observation_value}"
                 history.append(observation)
                 llm_input = self.splitter.join(history)
 
         return self.splitter.join(history)
+
+    def _get_observation(self,api,param):
+        if api in self.get_apis:
+            res=self.tool_obj.execute(api, **param)
+        else:
+            res=self.tool_obj.execute("retrieve_api",api=api,param=param,observation=True)
+        return res
 
 
     def __repr__(self):
