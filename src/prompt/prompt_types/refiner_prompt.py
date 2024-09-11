@@ -35,12 +35,13 @@ class RefinerPrompt(LLMPrompt):
         if memory_type is None:
             raise ValueError("memory should not be None type.")
 
+
         self._set_requirements(memory_type)
         self._set_examples(memory_type)
         self.prompt=self.system_template+"\n\n"
         self.prompt+=self.requirements+"\n\n"
         self.prompt+=self.examples+"\n\n"
-        self.prompt+=f"禁止输出无关内容，现在开始：\n输入：{input}\n输出：\n"
+        self.prompt+=f"禁止输出无关内容，现在开始：\n输入：{input}\n反思结果：\n"
         return self.prompt
 
 

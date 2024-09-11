@@ -58,7 +58,7 @@ class TextMemory(MetaMemory):
         rouge_l_f_score = scores[0]['rouge-l']['f']
         return rouge_l_f_score
 
-    def save(self,question,content, *args, **kwargs):
+    def save(self,user_question,content, *args, **kwargs):
         """
         :param question:
         :param content:
@@ -66,10 +66,13 @@ class TextMemory(MetaMemory):
         :param kwargs:
         :return:
         """
-        content=self._transform_data(question,content)
-        with open(self.file_path, 'a', encoding='utf-8') as f:
-            json_record = json.dumps(content,ensure_ascii=False)
-            f.write(json_record + '\n')
+        total_data = self._read_jsonl(self.file_path)
+        question_lst = [d["question"] for d in total_data]
+        if not user_question in question_lst:
+            content=self._transform_data(user_question,content)
+            with open(self.file_path, 'a', encoding='utf-8') as f:
+                json_record = json.dumps(content,ensure_ascii=False)
+                f.write(json_record + '\n')
 
     def query(self, question,rewrite_query=None, *args, **kwargs):
         """

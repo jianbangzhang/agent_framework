@@ -56,16 +56,21 @@ class RetrieveTool(BaseTool):
         """
         df=self.df
         tool_name=df["tool_name"].to_list()
+        tool_param=df["params"].to_list()
         observation_lst=df["return"].to_list()
-        for tool,observation in zip(tool_name,observation_lst):
+        for tool,observation,api_param in zip(tool_name,observation_lst,tool_param):
             try:
                 if not isinstance(tool,str) and not isinstance(observation,str):
                     continue
                 if api.lower()==tool.lower():
+                    if isinstance(api_param,str):
+                        api_param=eval(api_param)
+
                     if isinstance(observation,str):
                         observation=eval(observation)
                         for key in param:
-                            observation[key]=param[key]
+                            observation=str(observation).replace(api_param[key],param[key])
+                            observation=eval(observation)
                     else:
                         observation=observation
                     return str(observation)

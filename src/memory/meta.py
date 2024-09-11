@@ -28,7 +28,7 @@ class MetaMemory(ABC):
         self.n_shot=n_shot
 
     @abstractmethod
-    def save(self,question,content,*args,**kwargs):
+    def save(self,user_question,content,*args,**kwargs):
         raise NotImplementedError
 
 

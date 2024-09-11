@@ -11,13 +11,11 @@
 # Description：
 """
 import os
-
 from config import EnvironmentConfig
 from config import AgentSystemConfig
 from src.pipeline import AgentPipeline
 from logger import AutoLevelLogger
 from utils import print_args,print_env
-
 
 
 
@@ -54,6 +52,6 @@ def run_agent(user_question):
 if __name__ == '__main__':
     api_key = "XXXXX"
     os.environ['api_key'] = api_key
-    user_question="我想听周杰伦的歌曲。"
+    user_question="我想听林俊杰的歌曲。"
     answer=run_agent(user_question)
     print(answer)

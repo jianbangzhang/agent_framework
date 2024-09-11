@@ -66,10 +66,15 @@ class GraphMemory(MetaMemory):
         :param kwargs:
         :return:
         """
-        content=self._transform_data(user_question,content)
-        with open(self.file_path, 'a', encoding='utf-8') as f:
-            json_record = json.dumps(content,ensure_ascii=False)
-            f.write(json_record + '\n')
+        total_data = self._read_jsonl(self.file_path)
+        question_lst=[d["question"] for d in total_data]
+        if not user_question in question_lst:
+            content=self._transform_data(user_question,content)
+            with open(self.file_path, 'a', encoding='utf-8') as f:
+                json_record = json.dumps(content,ensure_ascii=False)
+                f.write(json_record + '\n')
+        else:
+            pass
 
     def query(self, question,rewrite_query=None, *args, **kwargs):
         """

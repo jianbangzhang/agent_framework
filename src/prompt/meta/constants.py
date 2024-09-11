@@ -15,7 +15,7 @@ EXECUATOR_SYSTEM_TEMPLATES="""你是一个multi-agent system的智能体成员�
 ##插件工具集
 在回答用户的问题时，可以选择使用给你的工具去调用外部信息进行用户的回复，你可以使用的工具有："""
 
-EXECUATOR_EXAMPLES="""##参考信息"""
+EXECUATOR_EXAMPLES="""##参考反思过程"""
 
 EXECUATOR_REQUIREMENTS="""## 输出格式
 Thought: 对于已有信息进行整合，并思考接下来应该做什么。
@@ -77,10 +77,14 @@ positive_reflection:
 - React: hm_product_recommend[param:keywords_dict]-after-我们有以下几款手机供您选择：1.小米11 Ultra 5G手机 256GB：价格为5999元，拥有120Hz高刷新率和骁龙888处理器，还配备了高品质相机系统；2. vivo X60 Pro 5G手机 256GB：售价为4498元，搭载Exynos 1080处理器与ZEISS联合调校的相机系统，拍照实力十足；3. 华为畅享 20 Pro 5G手机 128GB：价格亲民，只需2699元即可拥有优秀的相机和4000mAh的电池容量。
 negative_reflection: 
 - positive reacting: hm_product_recommend[param: {'keywords_dict': {'商品类目': '手机'}}]-after-我们有以下几款手机供您选择：1.小米11 Ultra 5G手机 256GB：价格为5999元，拥有120Hz高刷新率和骁龙888处理器，还配备了高品质相机系统；2. vivo X60 Pro 5G手机 256GB：售价为4498元，搭载Exynos 1080处理器与ZEISS联合调校的相机系统，拍照实力十足。
-- negative reacting: hm_product_recommend[param: {'keywords_dict': '手机'}]-after-参数传递错误。", "negative reacting: hm_product_recommend[param: {'sku_code_list': ['手机']}]-after-参数传递错误。
+- negative reacting: hm_product_recommend[param: {'keywords_dict': '手机'}]-after-参数传递错误; negative reacting: hm_product_recommend[param: {'sku_code_list': ['手机']}]-after-参数传递错误;negative reacting: hm_product_recommending-after-工具api名字写错。
 """
 
 REFINER_EXAMPLES_NATURAL="""【例子】
+## 工具：
+hm_product_recommend: Call this tool to interact with the hmproductrecommend API. What is the hmproductrecommend API useful for? . Parameters: [{"name": "keywords_dict", "description": "盒马推荐商品关键词字典。", "required": "True"}]
+
+## 对话：
 Question: 你好，请问你们有哪些手机可以推荐？
 Thought: 用户需要推荐手机，现在调用商品推荐工具hm_product_recommend。
 Action: hm_product_recommend
@@ -89,11 +93,14 @@ Observation: [{'sku_code': '10518244314', 'product_name': '小米11 Ultra 5G手�
 Thought: I now know the final answer
 Finish: 您好，我们有以下几款手机供您选择：1.小米11 Ultra 5G手机 256GB：价格为5999元，拥有120Hz高刷新率和骁龙888处理器，还配备了高品质相机系统；2. vivo X60 Pro 5G手机 256GB：售价为4498元，搭载Exynos 1080处理器与ZEISS联合调校的相机系统，拍照实力十足；这些手机都具有不同的特点和功能，您可以根据自己的需求进行选择。如果您有其他问题或需求，请随时告诉我。
 
+## 反思总结的内容：
+1.API写错；2.Parameter参数错误；3.重复调用同一个API，或者调错API；4.流程错误：Thought/Action/Action_Parameter/Observation/.../Thought/Finish;
 
+## 反思结果：
 positive_reflection: 
 - {"问题": "用户询问有哪些手机可以推荐。", "规划过程": "调用hm_product_recommend API，传入关键词字典{'商品类目': '手机'}。", "回复": "您好，我们有以下几款手机供您选择：1.小米11 Ultra 5G手机 256GB：价格为5999元，拥有120Hz高刷新率和骁龙888处理器，还配备了高品质相机系统；2. vivo X60 Pro 5G手机 256GB：售价为4498元，搭载Exynos 1080处理器与ZEISS联合调校的相机系统，拍照实力十足。这些手机都具有不同的特点和功能，您可以根据自己的需求进行选择。如果您有其他问题或需求，请随时告诉我。"}
 negative_reflection: 
-- {"tools_using": "API相似度高：系统中可能存在其他用于推荐商品的API，如hm_product_marketing或hm_product_info，这些API名称和功能与hm_product_recommend非常接近，容易造成误调用。", "parameters_passing": "参数拼写错误：如果keywords_dict参数中的值被拼写错误（如'商品类目'被拼写成'商品类别'），API可能无法识别该参数，导致查询失败。不完整或错误的参数设置：有些API可能需要多个参数共同传递，但如果遗漏了必需的参数或者误传了无关的参数，也可能导致API无法返回正确结果。"}
+- {"tools_using": "API相似度高：系统中可能存在其他用于推荐商品的API，如hm_product_marketing或hm_product_info，这些API名称和功能与hm_product_recommend非常接近，容易造成误调用。", "parameters_passing": "参数拼写错误：如果keywords_dict参数中的值被拼写错误（如'商品类目'被拼写成'商品类别'），API可能无法识别该参数，或者API名写错，导致查询失败。不完整或错误的参数设置：有些API可能需要多个参数共同传递，但如果遗漏了必需的参数或者误传了无关的参数，也可能导致API无法返回正确结果。"}
 """
 
 
